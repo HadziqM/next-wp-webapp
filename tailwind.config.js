@@ -14,6 +14,7 @@ module.exports = {
     colors: {
       gold: "#cb9b27",
       blue: "#1fb6ff",
+      "dark-blue": "#000088",
       pink: "#ff49db",
       orange: "#ff7849",
       green: "#13ce66",
@@ -23,7 +24,12 @@ module.exports = {
       gray: "#8492a6",
       "gray-light": "#d3dce6",
     },
-    extend: {},
+    extend: {
+      backgroundImage: {
+        profile3: "url(/profile3.jpg)",
+        profile4: "url(/profile4.jpg)",
+      },
+    },
   },
   plugins: [],
 };
