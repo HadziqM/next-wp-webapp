@@ -36,6 +36,7 @@ a {
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
+  background: black;
 }
 
 /* Track */
@@ -54,29 +55,32 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: #ab7b07;
 }
-.textStyle {
-  font-weight: 700;
-  text-align: center;
-  font-size: 50px;
-  font-family: Hack, sans-serif;
-  text-transform: uppercase;
-  background: linear-gradient(270deg, #ab7b07, #fff, #ab7b07);
-  letter-spacing: 5px;
+.cresent {
+  position: absolute;
+  top: 2rem;
+}
+.text2Style {
+  background: 50% 100%/50% 50% no-repeat
+    radial-gradient(ellipse at bottom, #fff, transparent, transparent);
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-repeat: no-repeat;
-  background-size: 80%;
-  animation: shine 5s linear infinite;
-  position: relative;
+  color: transparent;
+  font-size: 2rem;
+  font-family: "Source Sans Pro", sans-serif;
+  animation: reveal 3000ms ease-in-out forwards 200ms,
+    glow 2500ms linear infinite 2000ms;
 }
-
-@keyframes shine {
-  0% {
-    background-position-x: -500%;
+@keyframes reveal {
+  80% {
+    letter-spacing: 8px;
   }
   100% {
-    background-position-x: 500%;
+    background-size: 300% 300%;
+  }
+}
+@keyframes glow {
+  40% {
+    text-shadow: 0 0 8px #fff;
   }
 }
 

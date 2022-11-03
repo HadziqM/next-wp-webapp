@@ -1,3 +1,5 @@
+import Image from "next/image";
+import bg from "../public/logo.svg";
 import {
   FaFacebook,
   FaInstagram,
@@ -12,11 +14,11 @@ export default function Header() {
     <header className="container-out bg-black text-white">
       <div className="container-in">
         <div className="flex flex-col items-center">
-          <img className="w-12 h-12" src="/logo.svg" />
-          <h4 className="text-gold uppercase font-extralight">Masjid Akbar</h4>
-          <h4 className="text-gold uppercase font-extralight">
+          <Image src={bg} alt="Logo Masjid" width={48} height={48} />
+          <h2 className="text-gold uppercase font-extralight">Masjid Akbar</h2>
+          <h2 className="text-gold uppercase font-extralight">
             Mo'edhar Arifin
-          </h4>
+          </h2>
         </div>
         <div className="flex flex-col items-end justify-center">
           <div>

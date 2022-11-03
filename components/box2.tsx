@@ -1,11 +1,12 @@
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
+import Image, { StaticImageData } from "next/image";
 
 interface Props {
   children: React.ReactNode;
   animate: string;
-  image: string;
+  image: StaticImageData;
 }
 
 export default function Box2({ children, animate, image }: Props) {
@@ -44,12 +45,18 @@ export default function Box2({ children, animate, image }: Props) {
       >
         {animate == "left" ? (
           <>
-            <div
-              className={`bg-${image} h-[566px] w-[319px] bg-cover bg-center shadow-dark-blue shadow-2xl translate-x-4`}
-            />
+            <div className="h-[566px] w-[319px] shadow-dark-blue shadow-2xl translate-x-4">
+              <Image
+                src={image}
+                alt="property masjid"
+                objectFit="cover"
+                layout="fill"
+                style={{ borderRadius: "6px" }}
+              />
+            </div>
             <motion.div
               ref={ref}
-              className="flex justify-center items-center flex-col w-[375px] h-[478px] bg-[rgba(255,255,255,0.3)] rounded-lg "
+              className="flex justify-center items-center flex-col w-[375px] h-[478px] bg-[rgba(0,0,0,0.6)] rounded-lg "
               animate={control2}
               initial={animate + "2"}
               variants={boxVariant}
@@ -61,16 +68,22 @@ export default function Box2({ children, animate, image }: Props) {
           <>
             <motion.div
               ref={ref}
-              className="flex justify-center items-center flex-col w-[375px] h-[478px] bg-[rgba(255,255,255,0.3)] rounded-lg"
+              className="flex justify-center items-center flex-col w-[375px] h-[478px] bg-[rgba(0,0,0,0.6)] rounded-lg"
               animate={control2}
               initial={animate + "2"}
               variants={boxVariant}
             >
               {children}
             </motion.div>
-            <div
-              className={`bg-${image} h-[566px] w-[319px] bg-cover bg-center shadow-dark-blue shadow-2xl -translate-x-4`}
-            />
+            <div className="h-[566px] w-[319px] shadow-dark-blue shadow-2xl -translate-x-4">
+              <Image
+                src={image}
+                alt="property masjid"
+                objectFit="cover"
+                layout="fill"
+                style={{ borderRadius: "6px" }}
+              />
+            </div>
           </>
         )}
       </motion.div>
