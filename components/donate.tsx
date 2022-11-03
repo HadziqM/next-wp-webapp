@@ -15,7 +15,7 @@ export default function Donate(anjir: Idk) {
   });
   const percentage = Math.floor((anjir.min / anjir.max) * 100);
   return (
-    <div className="flex flex-col justify-center items-center w-[512px] h-[469px] bg-[rgba(0,0,0,0.5)] py-1 relative rounded-lg">
+    <div className="flex flex-col justify-center items-center w-[512px] h-[469px] bg-[rgba(0,0,0,0.9)] py-1 relative rounded-lg">
       <div className="flex w-[487px] h-[272px] relative">
         <Image
           src={anjir.image}
@@ -24,7 +24,7 @@ export default function Donate(anjir: Idk) {
           objectFit="cover"
         />
       </div>
-      <h3 className="font-bold text-[1.2rem] text-white">{anjir.title}</h3>
+      <h2 className="font-bold text-[1.2rem] text-white">{anjir.title}</h2>
       <p className="text-center text-[1rem] font-light text-white">
         {anjir.description}
       </p>
@@ -39,7 +39,7 @@ export default function Donate(anjir: Idk) {
         <p className="font-[0.5rem] text-gold">{formatter.format(anjir.min)}</p>
         <p className="font-[0.5rem] text-gold">{formatter.format(anjir.max)}</p>
       </div>
-      <button className="bg-gold text-center rounded-[43px] w-[244px] h-[43px] text-white">
+      <button className="bg-gold text-center rounded-[43px] w-[244px] h-[43px] font-bold">
         DONASI SEKARANG
       </button>
     </div>
