@@ -8,6 +8,7 @@ import {
   FaYoutube,
   FaEnvelope,
 } from "react-icons/fa";
+import Link from "next/link";
 
 export default function Header() {
   return (
@@ -22,42 +23,42 @@ export default function Header() {
         </div>
         <div className="flex flex-col items-end justify-center">
           <div>
-            <a
+            <Link
               className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
               href="/"
             >
               Beranda
-            </a>
-            <a
+            </Link>
+            <Link
               className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
               href="/"
             >
               profile
-            </a>
-            <a
+            </Link>
+            <Link
               className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
               href="/"
             >
               kajian kitab
-            </a>
-            <a
+            </Link>
+            <Link
               className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
               href="/"
             >
               agenda
-            </a>
-            <a
+            </Link>
+            <Link
               className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
               href="/"
             >
               podcast
-            </a>
-            <a
+            </Link>
+            <Link
               className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
               href="/"
             >
               kontak
-            </a>
+            </Link>
           </div>
           <div className="flex my-2">
             <FaYoutube className="text-white ml-1 hover:text-gold cursor-pointer w-4 h-4" />
