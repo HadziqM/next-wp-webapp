@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   FaFacebook,
   FaInstagram,
@@ -19,44 +20,44 @@ export default function Footer() {
         </p>
       </div>
       <div className="container-col">
-        <a
+        <Link
           className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
-          href="/"
+          href="/post"
         >
           Beranda
-        </a>
-        <a
+        </Link>
+        <Link
           className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
           href="/"
         >
           profile
-        </a>
-        <a
+        </Link>
+        <Link
           className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
           href="/"
         >
           kajian kitab
-        </a>
+        </Link>
       </div>
       <div className="container-col">
-        <a
+        <Link
           className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
           href="/"
         >
           agenda
-        </a>
-        <a
+        </Link>
+        <Link
           className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
           href="/"
         >
           podcast
-        </a>
-        <a
+        </Link>
+        <Link
           className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
           href="/"
         >
           kontak
-        </a>
+        </Link>
       </div>
       <div className="container-col items-start gap-2">
         <h2 className="text-sm my-2">KONTAK</h2>

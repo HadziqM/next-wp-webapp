@@ -25,7 +25,7 @@ export default function Header() {
           <div>
             <Link
               className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
-              href="/"
+              href="/post"
             >
               Beranda
             </Link>

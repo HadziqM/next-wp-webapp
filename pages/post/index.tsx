@@ -43,6 +43,7 @@ export default function WpPost({
           <Link
             href={`/post/${encodeURIComponent(e.node.slug)}`}
             className="m-2"
+            key={e.node.slug}
           >
             <PostCard
               title={e.node.title}
