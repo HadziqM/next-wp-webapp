@@ -60,14 +60,32 @@ async function fetchAPI(query:string, { variables } = {} as any) {
   export async function posts() {
     const data = await fetchAPI(
       `{
-              posts {
-                edges {
-                  node {
-                    slug
-                  }
+        posts {
+          edges {
+            node {
+              slug
+              title
+              date
+              categories {
+                nodes {
+                  name
                 }
               }
-            }`
+              featuredImage {
+                node {
+                  link
+                }
+              }
+              author {
+                node {
+                  name
+                }
+              }
+              excerpt
+            }
+          }
+        }
+      }`
     );
     return data?.posts;
   }

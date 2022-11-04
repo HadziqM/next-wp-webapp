@@ -20,8 +20,11 @@ export default function Wordpress({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <Layout>
-      <h1 className="text-center font-bold text-[2rem] my-4">{res.title}</h1>
-      <div dangerouslySetInnerHTML={{ __html: res.content }} />
+      <h1 className="text-center font-bold text-[2rem] mt-2">{res.title}</h1>
+      <div
+        className="wordpress"
+        dangerouslySetInnerHTML={{ __html: res.content }}
+      />
     </Layout>
   );
 }
