@@ -89,4 +89,26 @@ async function fetchAPI(query:string, { variables } = {} as any) {
     );
     return data?.posts;
   }
-  
+  export async function categorys(slug:string){
+    const data = await fetchAPI(
+      `{
+        category(id: "${slug}", idType: SLUG) {
+          name
+          posts {
+            nodes {
+              slug
+              title
+              date
+              featuredImage {
+                node {
+                  link
+                }
+              }
+            }
+          }
+        }
+      }
+      `
+    );
+    return data?.category;
+  }

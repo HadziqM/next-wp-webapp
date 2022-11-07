@@ -36,6 +36,7 @@ export async function getServerSideProps() {
 export default function WpPost({
   res,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  // window.alert(JSON.stringify(res));
   return (
     <Layout>
       <div className="grid grid-cols-3 w-screen p-8">
@@ -48,7 +49,7 @@ export default function WpPost({
             <PostCard
               title={e.node.title}
               description={e.node.excerpt}
-              date={e.node.date}
+              date="<p>hello world!</p>"
               author={e.node.author.node.name}
               link={e.node.featuredImage.node.link}
               category={e.node.categories.nodes}

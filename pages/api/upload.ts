@@ -10,6 +10,14 @@ export const config = {
     }
 };
 
+interface MetaFile{
+    title:string
+    desc:string
+    date:Date
+    category:string
+    hightlight:boolean
+}
+
 type ProcessedFiles = Array<[string, File]>;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
