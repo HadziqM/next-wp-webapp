@@ -13,6 +13,15 @@ interface Props {
   headline: Category;
   views: Views;
 }
+interface Card {
+  name: string;
+}
+interface Sorted {
+  img: string;
+  title: string;
+  date: string;
+  tags: "khutbah" | "podcast" | "kajian" | "agenda";
+}
 
 export async function getStaticProps() {
   const post: Posts = await listPosts();
@@ -28,6 +37,23 @@ export async function getStaticProps() {
     },
     revalidate: 1000,
   };
+}
+
+function Cards({ img, title, date, tags }: Sorted) {
+  return (
+    <div className=" flex flex-start p-2 items-center gap-2">
+      <img src={img} alt={title} className="h-[90] w-[161]" />
+      <div className="flex flex-col">
+        <h2>{title}</h2>
+        <div className="flex gap-1 flex-start">
+          <p className="text-gold">{tags}</p>
+          <p>
+            {String(new Date(date)).replace("GMT+0700 (Indochina Time)", "")}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function Beranda({ post, headline, views }: Props) {
