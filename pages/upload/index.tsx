@@ -1,9 +1,11 @@
 import type { NextPage } from "next";
 import React from "react";
 
-const Home: NextPage = () => {
+const Upload: NextPage = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const inputFileRef = React.useRef<HTMLInputElement | null>(null);
+  const inputTitleRef = React.useRef<HTMLInputElement | null>(null);
+  const inputDescRef = React.useRef<HTMLInputElement | null>(null);
 
   const handleOnClick = async (e: React.MouseEvent<HTMLInputElement>) => {
     /* Prevent form from submitting by default */
@@ -12,6 +14,14 @@ const Home: NextPage = () => {
     /* If file is not selected, then show alert message */
     if (!inputFileRef.current?.files?.length) {
       alert("Please, select file you want to upload");
+      return;
+    }
+    if (!inputTitleRef.current?.value) {
+      alert("Please, add title");
+      return;
+    }
+    if (!inputDescRef.current?.value) {
+      alert("Please, add desc");
       return;
     }
     if (!inputFileRef.current?.files[0]?.name.endsWith(".md")) {
@@ -26,6 +36,7 @@ const Home: NextPage = () => {
     Object.values(inputFileRef.current.files).forEach((file) => {
       formData.append("file", file);
     });
+    formData.append("title", inputTitleRef.current.value);
 
     /* Send request to our api route */
     const response = await fetch("/api/upload", {
@@ -53,6 +64,24 @@ const Home: NextPage = () => {
   return (
     <form>
       <div>
+        <input
+          type="text"
+          name="title"
+          required
+          className="border-black border"
+          ref={inputTitleRef}
+        />
+      </div>
+      <div>
+        <input
+          type="text"
+          name="description"
+          required
+          className="border-black border"
+          ref={inputDescRef}
+        />
+      </div>
+      <div>
         <input type="file" name="myfile" ref={inputFileRef} />
       </div>
       <div>
@@ -61,6 +90,7 @@ const Home: NextPage = () => {
           value="Upload"
           disabled={isLoading}
           onClick={handleOnClick}
+          className="border border-black cursor-pointer bg-[#ddd] p-1"
         />
         {isLoading && ` Wait, please...`}
       </div>
@@ -68,4 +98,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Upload;

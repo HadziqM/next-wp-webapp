@@ -13,16 +13,18 @@ export const config = {
 type ProcessedFiles = Array<[string, File]>;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-
     let status = 200,
         resultBody = { status: 'ok', message: 'Files were uploaded successfully' };
-
     /* Get files using formidable */
+    const getPath = path.join(process.cwd(), `/uploads/`);
     const files = await new Promise<ProcessedFiles | undefined>((resolve, reject) => {
-        const form = new formidable.IncomingForm();
+        const form = new formidable.IncomingForm({uploadDir:getPath});
         const files: ProcessedFiles = [];
         form.on('file', function (field, file) {
             files.push([field, file]);
+        })
+        form.on('field',(fname,fvalue)=>{
+            console.log('fname : '+fname+' fvalue:'+fvalue)
         })
         form.on('end', () => resolve(files));
         form.on('error', err => reject(err));
