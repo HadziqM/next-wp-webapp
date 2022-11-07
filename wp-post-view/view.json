@@ -1,8 +1,16 @@
 {
-    "views":[
-        {
-            "slug":"",
-            "view":0
-        }
-    ]
+  "views": [
+    {
+      "slug": "podcast-prof-dr-kh-moh-ali-aziz-m-ag",
+      "view": 3
+    },
+    {
+      "slug": "kajian-kitab-fiqih-islam-wa-adillatuhu-ust-mohahsib-nuri-arief",
+      "view": 3
+    },
+    {
+      "slug": "memimpin-dengan-otak-dan-hati-prof-dr-kh-abdul-ghofur",
+      "view": 4
+    }
+  ]
 }

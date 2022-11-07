@@ -112,3 +112,20 @@ async function fetchAPI(query:string, { variables } = {} as any) {
     );
     return data?.category;
   }
+export async function listPosts(){
+    const data = await fetchAPI(
+      `{
+        posts {
+          edges {
+            node {
+              slug
+              title
+              date
+            }
+          }
+        }
+      }
+      `
+    )
+    return data?.posts
+}

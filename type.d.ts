@@ -19,3 +19,12 @@ export interface Views{
         view:number
     }[]
 }
+export interface Posts{
+    edges:{
+        node:{
+            slug:string
+            title:string
+            date:string
+        }[]
+    }
+}
