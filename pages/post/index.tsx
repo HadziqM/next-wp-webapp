@@ -1,45 +1,56 @@
 import { listPosts, categorys } from "../../lib/wp";
-import { Posts, Category, Views } from "../../type";
-import { promises as fs } from "fs";
+import { Posts, Category } from "../../type";
 import Router from "next/router";
-import path from "path";
 import Image from "next/image";
 import Layout from "../../components/layout";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import Head from "next/head";
+import { PrismaClient } from "@prisma/client";
 
 interface Props {
   post: Posts;
   headline: Category;
-  views: Views;
+  views: {
+    slug: string;
+  }[];
 }
 interface Sorted {
   img: string;
   title: string;
   date: string;
   tags: string;
+  slug: string;
 }
 
 export async function getStaticProps() {
   const post: Posts = await listPosts();
   const headline: Category = await categorys("headline");
-  const fileDir = path.join(process.cwd(), `/wp-post-view/`);
-  const data = String(await fs.readFile(fileDir + "view.json"));
-  let json: Views = JSON.parse(data);
+  const prisma = new PrismaClient();
+  const json = await prisma.post.findMany({
+    orderBy: { views: "desc" },
+    select: { slug: true },
+  });
+  await prisma.$disconnect();
   return {
     props: {
       post: post,
       headline: headline,
       views: json,
     },
-    revalidate: 1000,
+    revalidate: 10,
   };
 }
 
-function Cards({ img, title, date, tags }: Sorted) {
+function Cards({ img, title, date, tags, slug }: Sorted) {
+  const onClicked = function () {
+    Router.push(`/post/${slug}`);
+  };
   return (
-    <div className=" flex flex-start p-2 items-center gap-2">
+    <div
+      className=" flex flex-start p-2 items-center gap-2 cursor-pointer hover:bg-[rgba(0,0,0,0.1)] w-full"
+      onClick={onClicked}
+    >
       <Image src={img} alt={title} width={161} height={90} />
       <div
         className="flex flex-col justify-between py-1"
@@ -58,15 +69,9 @@ function Cards({ img, title, date, tags }: Sorted) {
 }
 
 export default function Beranda({ post, headline, views }: Props) {
-  const views1 = post.edges.filter(
-    (e) => e.node.slug == views.views[0].slug
-  )[0];
-  const views2 = post.edges.filter(
-    (e) => e.node.slug == views.views[1].slug
-  )[0];
-  const views3 = post.edges.filter(
-    (e) => e.node.slug == views.views[2].slug
-  )[0];
+  const views1 = post.edges.filter((e) => e.node.slug == views[0].slug)[0];
+  const views2 = post.edges.filter((e) => e.node.slug == views[1].slug)[0];
+  const views3 = post.edges.filter((e) => e.node.slug == views[2].slug)[0];
   const onClicked = function (i: number, t: any) {
     Router.push(`/post/${headline.posts.nodes[i].slug}`);
   };
@@ -111,6 +116,7 @@ export default function Beranda({ post, headline, views }: Props) {
                   (e) => e.name !== "Headline"
                 )[0].name
               }
+              slug={post.edges[0].node.slug}
             />
             <Cards
               img={post.edges[1].node.featuredImage.node.link}
@@ -121,6 +127,7 @@ export default function Beranda({ post, headline, views }: Props) {
                   (e) => e.name !== "Headline"
                 )[0].name
               }
+              slug={post.edges[1].node.slug}
             />
             <Cards
               img={post.edges[2].node.featuredImage.node.link}
@@ -131,6 +138,7 @@ export default function Beranda({ post, headline, views }: Props) {
                   (e) => e.name !== "Headline"
                 )[0].name
               }
+              slug={post.edges[2].node.slug}
             />
           </div>
         </div>
@@ -148,6 +156,7 @@ export default function Beranda({ post, headline, views }: Props) {
                   (e) => e.name !== "Headline"
                 )[0].name
               }
+              slug={views1.node.slug}
             />
             <Cards
               img={views2.node.featuredImage.node.link}
@@ -158,6 +167,7 @@ export default function Beranda({ post, headline, views }: Props) {
                   (e) => e.name !== "Headline"
                 )[0].name
               }
+              slug={views2.node.slug}
             />
             <Cards
               img={views3.node.featuredImage.node.link}
@@ -168,6 +178,7 @@ export default function Beranda({ post, headline, views }: Props) {
                   (e) => e.name !== "Headline"
                 )[0].name
               }
+              slug={views3.node.slug}
             />
           </div>
         </div>

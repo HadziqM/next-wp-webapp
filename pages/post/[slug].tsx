@@ -1,10 +1,8 @@
 import { InferGetServerSidePropsType } from "next/types";
 import Layout from "../../components/layout";
 import { testingPost } from "../../lib/wp";
-import { promises as fs } from "fs";
-import path from "path";
-import { Views } from "../../type";
 import Head from "next/head";
+import { PrismaClient } from "@prisma/client";
 
 interface query {
   slug: string;
@@ -16,30 +14,20 @@ interface input {
 export async function getServerSideProps(context: input) {
   const { slug } = context.query;
   const res = await testingPost(slug);
-  const fileDir = path.join(process.cwd(), `/wp-post-view/`);
-  const data = String(await fs.readFile(fileDir + "view.json"));
-  let json: Views = JSON.parse(data);
-  const result = json.views.filter((e) => e.slug == slug);
-  if (result.length === 1) {
-    const views = result[0].view + 1;
-    const updated = json.views.map((e) => {
-      if (e.slug == slug) {
-        e.view = views;
-        return e;
-      }
-      return e;
+  const prisma = new PrismaClient();
+  const view = await prisma.post.findUnique({
+    where: { slug: slug },
+    select: { views: true },
+  });
+  if (view === null) {
+    await prisma.post.create({ data: { slug: slug, views: 1 } });
+  } else {
+    await prisma.post.update({
+      where: { slug: slug },
+      data: { views: view.views + 1 },
     });
-    const json_data = JSON.stringify({ views: updated }, null, 2);
-    await fs.writeFile(fileDir + "view.json", json_data);
-  } else if (result.length === 0) {
-    const updated = {
-      slug: String(slug),
-      view: 1,
-    };
-    json.views.push(updated);
-    const json_data = JSON.stringify(json, null, 2);
-    await fs.writeFile(fileDir + "view.json", json_data);
   }
+  await prisma.$disconnect();
   return { props: { res } };
 }
 
