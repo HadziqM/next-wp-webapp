@@ -2,34 +2,31 @@ import { InferGetServerSidePropsType } from "next/types";
 import Layout from "../../components/layout";
 import { testingPost } from "../../lib/wp";
 import Head from "next/head";
+import { GetServerSideProps } from "next";
 import { PrismaClient } from "@prisma/client";
 
-interface query {
-  slug: string;
-}
-interface input {
-  query: query;
-}
-
-export async function getServerSideProps(context: input) {
+export const getServerSideProps: GetServerSideProps = async function (context) {
   const { slug } = context.query;
-  const res = await testingPost(slug);
-  const prisma = new PrismaClient();
-  const view = await prisma.post.findUnique({
-    where: { slug: slug },
-    select: { views: true },
-  });
-  if (view === null) {
-    await prisma.post.create({ data: { slug: slug, views: 1 } });
-  } else {
-    await prisma.post.update({
+  if (slug !== undefined && !(slug instanceof Array)) {
+    const res = await testingPost(slug);
+    if (res == null) return { notFound: true };
+    const prisma = new PrismaClient();
+    const view = await prisma.post.findUnique({
       where: { slug: slug },
-      data: { views: view.views + 1 },
+      select: { views: true },
     });
-  }
-  await prisma.$disconnect();
-  return { props: { res } };
-}
+    if (view === null) {
+      await prisma.post.create({ data: { slug: slug, views: 1 } });
+    } else {
+      await prisma.post.update({
+        where: { slug: slug },
+        data: { views: view.views + 1 },
+      });
+    }
+    await prisma.$disconnect();
+    return { props: { res } };
+  } else return { notFound: true };
+};
 
 export default function Wordpress({
   res,

@@ -6,6 +6,7 @@ import Layout from "../../components/layout";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import Head from "next/head";
+import { GetStaticProps } from "next";
 import { PrismaClient } from "@prisma/client";
 
 interface Props {
@@ -23,7 +24,7 @@ interface Sorted {
   slug: string;
 }
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async function (context) {
   const post: Posts = await listPosts();
   const headline: Category = await categorys("headline");
   const prisma = new PrismaClient();
@@ -38,9 +39,9 @@ export async function getStaticProps() {
       headline: headline,
       views: json,
     },
-    revalidate: 10,
+    revalidate: 1000,
   };
-}
+};
 
 function Cards({ img, title, date, tags, slug }: Sorted) {
   const onClicked = function () {
@@ -96,7 +97,12 @@ export default function Beranda({ post, headline, views }: Props) {
           >
             {headline.posts.nodes.map((e) => (
               <div style={{ cursor: "pointer" }}>
-                <img src={e.featuredImage.node.link} alt={e.slug} />
+                <img
+                  src={e.featuredImage.node.link}
+                  alt={e.slug}
+                  width="600px"
+                  height="400px"
+                />
                 <p className="bg-gold p-2 text-lg my-2 rounded-md">{e.title}</p>
               </div>
             ))}
@@ -108,6 +114,7 @@ export default function Beranda({ post, headline, views }: Props) {
               <h2 className="text-black bg-gold p-1">TERBARU</h2>
             </div>
             <Cards
+              key={post.edges[0].node.slug}
               img={post.edges[0].node.featuredImage.node.link}
               title={post.edges[0].node.title}
               date={post.edges[0].node.date}
@@ -119,6 +126,7 @@ export default function Beranda({ post, headline, views }: Props) {
               slug={post.edges[0].node.slug}
             />
             <Cards
+              key={post.edges[1].node.slug}
               img={post.edges[1].node.featuredImage.node.link}
               title={post.edges[1].node.title}
               date={post.edges[1].node.date}
@@ -130,6 +138,7 @@ export default function Beranda({ post, headline, views }: Props) {
               slug={post.edges[1].node.slug}
             />
             <Cards
+              key={post.edges[2].node.slug}
               img={post.edges[2].node.featuredImage.node.link}
               title={post.edges[2].node.title}
               date={post.edges[2].node.date}
@@ -157,6 +166,7 @@ export default function Beranda({ post, headline, views }: Props) {
                 )[0].name
               }
               slug={views1.node.slug}
+              key={views1.node.slug}
             />
             <Cards
               img={views2.node.featuredImage.node.link}
@@ -168,6 +178,7 @@ export default function Beranda({ post, headline, views }: Props) {
                 )[0].name
               }
               slug={views2.node.slug}
+              key={views2.node.slug}
             />
             <Cards
               img={views3.node.featuredImage.node.link}
@@ -179,6 +190,7 @@ export default function Beranda({ post, headline, views }: Props) {
                 )[0].name
               }
               slug={views3.node.slug}
+              key={views3.node.slug}
             />
           </div>
         </div>
