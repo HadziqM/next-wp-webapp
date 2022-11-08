@@ -9,7 +9,7 @@ export default function Layout({ children }: Props) {
   return (
     <>
       <Header />
-      <article className="m-0 p-0">{children}</article>
+      <article className="my-2 p-0">{children}</article>
       <Footer />
     </>
   );

@@ -6,6 +6,9 @@ const nextConfig = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images: {
+    domains: ["masjidmoedhararifin.com"],
+  },
 };
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: false,

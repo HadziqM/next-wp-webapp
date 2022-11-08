@@ -25,6 +25,17 @@ export interface Posts{
             slug:string
             title:string
             date:string
-        }[]
-    }
+            categories:{
+                nodes:{
+                    name:string
+                    slug:string
+                }[]
+            }
+            featuredImage:{
+                node:{
+                    link:string
+                }
+            }
+        }
+    }[]
 }

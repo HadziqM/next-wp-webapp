@@ -115,16 +115,27 @@ async function fetchAPI(query:string, { variables } = {} as any) {
 export async function listPosts(){
     const data = await fetchAPI(
       `{
-        posts {
+        posts(where: {orderby: {field: DATE, order: DESC}}) {
           edges {
             node {
               slug
-              title
               date
+              title
+              categories {
+                nodes {
+                  slug
+                  name
+                }
+              }
+              featuredImage {
+                node {
+                  link
+                }
+              }
             }
           }
         }
-      }
+      } 
       `
     )
     return data?.posts
