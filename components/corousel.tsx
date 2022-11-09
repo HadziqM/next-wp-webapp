@@ -63,9 +63,9 @@ export default function Corousel({ children, width, height, interval }: Props) {
           updateIndex(slide + 1);
         }}
         className="absolute z-50 h-full flex items-center cursor-pointer hover:bg-[rgba(0,0,0,0.1)]"
-        style={{ left: width - 20 }}
+        style={{ left: width - 50 }}
       >
-        <AiFillCaretRight />
+        <AiFillCaretRight className="w-[50px] h-[50px]" />
       </div>
       <div
         onClick={(e) => {
@@ -74,10 +74,10 @@ export default function Corousel({ children, width, height, interval }: Props) {
         }}
         className="absolute left-0 z-50 h-full flex items-center cursor-pointer hover:bg-[rgba(0,0,0,0.1)]"
       >
-        <AiFillCaretLeft />
+        <AiFillCaretLeft className="w-[50px] h-[50px]" />
       </div>
       <div
-        className="whitespace-nowrap transition-transform"
+        className="whitespace-nowrap transition-transform duration-500"
         style={{ transform: `translateX(${-slide * 100}%)` }}
       >
         {React.Children.map(children, (c: any, i) =>
