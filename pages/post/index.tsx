@@ -26,19 +26,20 @@ interface Sorted {
 }
 
 export const getStaticProps: GetStaticProps = async function (context) {
-  const post: Posts = await listPosts();
-  const headline: Category = await categorys("headline");
   const prisma = new PrismaClient();
-  const json = await prisma.post.findMany({
+  const post: Promise<Posts> = listPosts();
+  const headline: Promise<Category> = categorys("headline");
+  const json = prisma.post.findMany({
     orderBy: { views: "desc" },
     select: { slug: true },
   });
+  const [posts, headlines, jsons] = await Promise.all([post, headline, json]);
   await prisma.$disconnect();
   return {
     props: {
-      post: post,
-      headline: headline,
-      views: json,
+      post: posts,
+      headline: headlines,
+      views: jsons,
     },
     revalidate: 1000,
   };

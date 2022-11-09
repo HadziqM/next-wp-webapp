@@ -8,13 +8,14 @@ import { PrismaClient } from "@prisma/client";
 export const getServerSideProps: GetServerSideProps = async function (context) {
   const { slug } = context.query;
   if (slug !== undefined && !(slug instanceof Array)) {
-    const res = await testingPost(slug);
-    if (res == null) return { notFound: true };
+    const result = testingPost(slug);
     const prisma = new PrismaClient();
-    const view = await prisma.post.findUnique({
+    const views = prisma.post.findUnique({
       where: { slug: slug },
       select: { views: true },
     });
+    const [res, view] = await Promise.all([result, views]);
+    if (res == null) return { notFound: true };
     if (view === null) {
       await prisma.post.create({ data: { slug: slug, views: 1 } });
     } else {
