@@ -1,5 +1,6 @@
 import { listPosts, categorys } from "../../lib/wp";
 import { Posts, Category } from "../../type";
+import Corousel, { CorouselItem } from "../../components/corousel";
 import Router from "next/router";
 import Image from "next/image";
 import Layout from "../../components/layout";
@@ -73,9 +74,6 @@ export default function Beranda({ post, headline, views }: Props) {
   const views1 = post.edges.filter((e) => e.node.slug == views[0].slug)[0];
   const views2 = post.edges.filter((e) => e.node.slug == views[1].slug)[0];
   const views3 = post.edges.filter((e) => e.node.slug == views[2].slug)[0];
-  const onClicked = function (i: number, t: any) {
-    Router.push(`/post/${headline.posts.nodes[i].slug}`);
-  };
   return (
     <>
       <Head>
@@ -84,29 +82,24 @@ export default function Beranda({ post, headline, views }: Props) {
         <link rel="icon" href="/logo.svg" />
       </Head>
       <Layout>
-        <div className="flex flex-col justify-center items-center relative my-4">
-          <h2 className="absolute p-2 bg-gold border-black border rounded-md z-50 top-1 -translate-x-[235px]">
-            Berita Utama
-          </h2>
-          <Carousel
-            autoPlay
-            infiniteLoop
-            interval={5000}
-            width="600px"
-            onClickItem={onClicked}
-          >
-            {headline.posts.nodes.map((e) => (
-              <div style={{ cursor: "pointer" }}>
-                <img
-                  src={e.featuredImage.node.link}
-                  alt={e.slug}
-                  width="600px"
-                  height="400px"
-                />
-                <p className="bg-gold p-2 text-lg my-2 rounded-md">{e.title}</p>
-              </div>
-            ))}
-          </Carousel>
+        <div className="container-out">
+          <div className="container-in">
+            <Corousel width={600} height={400} interval={5000}>
+              {headline.posts.nodes.map((e) => (
+                <CorouselItem
+                  slug={`/post/${e.slug}`}
+                  url={e.featuredImage.node.link}
+                  alt={e.title}
+                  lebar={600}
+                  height={400}
+                >
+                  <h2 className="m-2 w-full text-center text-black text-xl px-1">
+                    {e.title}
+                  </h2>
+                </CorouselItem>
+              ))}
+            </Corousel>
+          </div>
         </div>
         <div className="container-out">
           <div className="container-in flex-col items-start">
