@@ -1,6 +1,6 @@
 interface Post{
-    title:string,
-    content:string,
+    title?:string,
+    content?:string,
 }
 
 
@@ -94,7 +94,7 @@ async function fetchAPI(query:string, { variables } = {} as any) {
       `{
         category(id: "${slug}", idType: SLUG) {
           name
-          posts {
+          posts(where: {orderby: {field: DATE, order: DESC}}){
             nodes {
               slug
               title
