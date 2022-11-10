@@ -9,17 +9,6 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import Cards from "../../components/card";
 import { PrismaClient } from "@prisma/client";
 
-interface Jadwal {
-  slug: string;
-  title: string;
-  date: string;
-  featuredImage: {
-    node: {
-      link: string;
-    };
-  };
-}
-
 export const getStaticProps = async function () {
   const prisma = new PrismaClient();
   const post: Promise<Posts> = listPosts();

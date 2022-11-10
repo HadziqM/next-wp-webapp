@@ -7,7 +7,7 @@ const nextConfig = {
     defaultLocale: "id",
   },
   images: {
-    domains: ["masjidmoedhararifin.com"],
+    domains: ["masjidmoedhararifin.com", "media.discordapp.net"],
   },
   experimental: {
     isrMemoryCacheSize: 0,

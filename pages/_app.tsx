@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import "../styles/nprogress.css";
-import "../styles/Wordpress.css";
+import "../styles/wordpress.css";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useEffect } from "react";

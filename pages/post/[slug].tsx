@@ -45,7 +45,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       result: result,
       slug: slug,
     },
-    revalidate: 1000,
+    revalidate: 24 * 60 * 60,
   };
 };
 export default function Wordpress({ result, slug }: Props) {

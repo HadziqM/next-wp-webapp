@@ -25,3 +25,11 @@ model comment {
   avatar_url String
   content    String
 }
+
+model infaq {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  image String
+  max   Int
+  value Int
+}
