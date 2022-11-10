@@ -20,6 +20,7 @@ interface Post {
 interface Props {
   result: Post;
   slug: string;
+  auth: string;
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -44,15 +45,16 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       result: result,
       slug: slug,
+      auth: process.env.NEXTAUTH_URL,
     },
     revalidate: 24 * 60 * 60,
   };
 };
-export default function Wordpress({ result, slug }: Props) {
+export default function Wordpress({ result, slug, auth }: Props) {
   let dataView;
   React.useEffect(() => {
     const getData = async () => {
-      const data = await fetch(`http://localhost:3000/api/prisma/${slug}`);
+      const data = await fetch(`${auth}/api/prisma/${slug}`);
       const json: ApiJson = await data.json();
       if (data.status == 400) {
         dataView = json.message;
