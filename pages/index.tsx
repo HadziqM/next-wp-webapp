@@ -31,7 +31,12 @@ export default function Test() {
         <link rel="icon" href="/logo.svg" />
       </Head>
       <div className="-z-50 fixed t-0 l-0 w-screen h-screen">
-        <Image src={Background} alt="" objectFit="cover" layout="fill" />
+        <Image
+          src={Background}
+          alt="moed har arifin mosque at night"
+          objectFit="cover"
+          layout="fill"
+        />
       </div>
       <Layout>
         <section className="w-screen flex flex-col justify-center items-center h-screen relative">
