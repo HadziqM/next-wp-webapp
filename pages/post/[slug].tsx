@@ -1,6 +1,7 @@
 import Layout from "../../components/layout";
 import Head from "next/head";
 import React from "react";
+import CommentCard from "../../components/comment_card";
 import { motion, AnimatePresence } from "framer-motion";
 import SignModal from "../../components/signModal";
 import { testingPost, listPosts } from "../../lib/wp";
@@ -8,6 +9,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { ParsedUrlQuery } from "querystring";
 import { Posts } from "../../type";
+import { comment } from "@prisma/client";
 
 interface IParams extends ParsedUrlQuery {
   slug: string;
@@ -15,6 +17,10 @@ interface IParams extends ParsedUrlQuery {
 interface ApiJson {
   message?: string;
   view?: number;
+}
+interface Out {
+  message?: string;
+  data: comment[];
 }
 interface Post {
   title: string;
@@ -54,17 +60,19 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
 };
 export default function Wordpress({ result, slug, auth }: Props) {
-  let dataView;
+  const [data, setData] = React.useState([] as comment[]);
   const { data: session } = useSession();
   React.useEffect(() => {
     const getData = async () => {
-      const data = await fetch(`${auth}/api/prisma/${slug}`);
-      const json: ApiJson = await data.json();
-      if (data.status == 400) {
-        dataView = json.message;
-      } else {
-        dataView = json.view;
-      }
+      const [data, data2] = await Promise.all([
+        fetch(`${auth}/api/prisma/${slug}`),
+        fetch(`${auth}/api/comments/${slug}`),
+      ]);
+      const [json, json2]: [ApiJson, Out] = await Promise.all([
+        data.json(),
+        data2.json(),
+      ]);
+      json2.message && setData(json2.data);
     };
     getData().catch((e) => console.log(e));
   }, []);
@@ -153,6 +161,17 @@ export default function Wordpress({ result, slug, auth }: Props) {
                   </div>
                 </div>
               </form>
+              <div className="mb-4 w-full bg-gray-50 rounded-lg border border-gray-200">
+                {data.length !== 0 &&
+                  data.map((e) => (
+                    <CommentCard
+                      name={e.name}
+                      url={e.avatar_url}
+                      date={e.date}
+                      comment={e.content}
+                    />
+                  ))}
+              </div>
             </div>
           </div>
         </div>
