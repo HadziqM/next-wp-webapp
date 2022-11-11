@@ -1,6 +1,3 @@
-import Header from "./header";
-import Footer from "./footer";
-
 interface Props {
   children: React.ReactNode;
 }
@@ -8,9 +5,9 @@ interface Props {
 export default function Layout({ children }: Props) {
   return (
     <>
-      <Header />
-      <article className="my-2 p-0">{children}</article>
-      <Footer />
+      <main>
+        <article className="my-2 p-0">{children}</article>
+      </main>
     </>
   );
 }

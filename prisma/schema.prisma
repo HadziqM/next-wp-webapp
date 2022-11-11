@@ -18,9 +18,10 @@ model post {
 }
 
 model comment {
-  id         Int    @id @default(autoincrement())
-  post       post   @relation(fields: [post_slug], references: [slug])
+  id         Int      @id @default(autoincrement())
+  post       post     @relation(fields: [post_slug], references: [slug])
   post_slug  String
+  date       DateTime @default(now())
   name       String
   avatar_url String
   content    String
