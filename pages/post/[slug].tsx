@@ -65,14 +65,14 @@ export default function Wordpress({ result, slug, auth }: Props) {
   React.useEffect(() => {
     const getData = async () => {
       const [data, data2] = await Promise.all([
-        fetch(`${auth}/api/prisma/${slug}`),
-        fetch(`${auth}/api/comments/${slug}`),
+        fetch(`/api/prisma/${slug}`),
+        fetch(`/api/comments/${slug}`),
       ]);
       const [json, json2]: [ApiJson, Out] = await Promise.all([
         data.json(),
         data2.json(),
       ]);
-      json2.message && setData(json2.data);
+      setData(json2.data);
     };
     getData().catch((e) => console.log(e));
   }, []);
@@ -83,6 +83,23 @@ export default function Wordpress({ result, slug, auth }: Props) {
   const open = function () {
     setModal(true);
   };
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!session?.user) {
+      return setModal(true);
+    }
+    const commentArea = String(inputDescRef.current?.value);
+    const dataComment: comment = {
+      avatar_url: session.user.image ?? "",
+      name: String(session.user.name) ?? String(session.user.email),
+      date: new Date(),
+      content: commentArea,
+      id: 0,
+      post_slug: "",
+    };
+    setData([dataComment, ...data]);
+  };
+  const inputDescRef = React.useRef<HTMLTextAreaElement | null>(null);
   return (
     <>
       <Head>
@@ -142,7 +159,7 @@ export default function Wordpress({ result, slug, auth }: Props) {
               >
                 {modal && <SignModal handleClose={close} />}
               </AnimatePresence>
-              <form>
+              <form onSubmit={onSubmit}>
                 <div className="mb-4 w-full bg-gray-50 rounded-lg border border-gray-200">
                   <div className="py-2 px-4 bg-white rounded-t-lg">
                     <label className="sr-only">Your comment</label>
@@ -152,10 +169,14 @@ export default function Wordpress({ result, slug, auth }: Props) {
                       className="px-0 w-full text-sm text-gray-900 bg-white border-0 focus:ring-2"
                       placeholder="Write a comment..."
                       required
+                      ref={inputDescRef}
                     ></textarea>
                   </div>
                   <div className="flex justify-between items-center py-2 px-3 border-t">
-                    <button className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200">
+                    <button
+                      type={"submit"}
+                      className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200"
+                    >
                       Post comment
                     </button>
                   </div>
