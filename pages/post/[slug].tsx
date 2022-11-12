@@ -61,6 +61,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 export default function Wordpress({ result, slug, auth }: Props) {
   const [data, setData] = React.useState([] as comment[]);
+  const [textComment, setTextComment] = React.useState("");
   const { data: session } = useSession();
   React.useEffect(() => {
     const getData = async () => {
@@ -83,23 +84,31 @@ export default function Wordpress({ result, slug, auth }: Props) {
   const open = function () {
     setModal(true);
   };
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!session?.user) {
       return setModal(true);
     }
-    const commentArea = String(inputDescRef.current?.value);
-    const dataComment: comment = {
-      avatar_url: session.user.image ?? "",
-      name: String(session.user.name) ?? String(session.user.email),
-      date: new Date(),
-      content: commentArea,
-      id: 0,
-      post_slug: "",
-    };
-    setData([dataComment, ...data]);
+    const jsonData = JSON.stringify({
+      avatar: session.user.image,
+      name: session.user.name ?? session.user.email,
+      slug: slug,
+      content: textComment,
+    });
+    await (await fetch(`/api/add_comments?json=${jsonData}`)).json();
+    setTextComment("");
+    setData([
+      {
+        post_slug: slug,
+        date: new Date(),
+        id: Math.floor(Math.random() * 1000),
+        avatar_url: session.user.image ?? "",
+        name: session.user.name ?? String(session.user.email),
+        content: textComment,
+      },
+      ...data,
+    ]);
   };
-  const inputDescRef = React.useRef<HTMLTextAreaElement | null>(null);
   return (
     <>
       <Head>
@@ -118,7 +127,18 @@ export default function Wordpress({ result, slug, auth }: Props) {
               dangerouslySetInnerHTML={{ __html: result.content }}
             />
             <div className="w-[800px] flex flex-col border-gold border-[3px] rounded-lg shadow-xl shadow-black justify-center items-cente">
-              {session?.user ? (
+              {!session && (
+                <div className="flex justify-start items-center p-4 gap-2 w-full">
+                  <h2 className="font-bold">Please Log-in to Comment</h2>
+                  <button
+                    onClick={(e) => (modal ? close() : open())}
+                    className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 ml-auto"
+                  >
+                    Log-In
+                  </button>
+                </div>
+              )}
+              {session?.user && (
                 <div className="flex justify-start items-center p-4 gap-2 w-full">
                   {session.user.image && (
                     <img
@@ -140,18 +160,7 @@ export default function Wordpress({ result, slug, auth }: Props) {
                     Log-Out
                   </button>
                 </div>
-              ) : (
-                <div className="flex justify-start items-center p-4 gap-2 w-full">
-                  <h2 className="font-bold">Please Log-in to Comment</h2>
-                  <button
-                    onClick={(e) => (modal ? close() : open())}
-                    className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 ml-auto"
-                  >
-                    Log-In
-                  </button>
-                </div>
               )}
-
               <AnimatePresence
                 initial={false}
                 exitBeforeEnter
@@ -166,10 +175,11 @@ export default function Wordpress({ result, slug, auth }: Props) {
                     <textarea
                       id="comment"
                       rows={4}
-                      className="px-0 w-full text-sm text-gray-900 bg-white border-0 focus:ring-2"
+                      className="px-1 w-full text-sm text-gray-900 bg-white border-0 focus:ring-0"
                       placeholder="Write a comment..."
                       required
-                      ref={inputDescRef}
+                      value={textComment}
+                      onChange={(e) => setTextComment(e.target.value)}
                     ></textarea>
                   </div>
                   <div className="flex justify-between items-center py-2 px-3 border-t">
@@ -190,6 +200,7 @@ export default function Wordpress({ result, slug, auth }: Props) {
                       url={e.avatar_url}
                       date={e.date}
                       comment={e.content}
+                      key={e.id}
                     />
                   ))}
               </div>
