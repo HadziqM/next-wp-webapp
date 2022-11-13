@@ -1,15 +1,16 @@
 import Layout from "../../components/layout";
 import Head from "next/head";
-import React from "react";
 import CommentCard from "../../components/comment_card";
-import { motion, AnimatePresence } from "framer-motion";
 import SignModal from "../../components/signModal";
+import Form from "../../components/form_comments";
+import React from "react";
 import { testingPost, listPosts } from "../../lib/wp";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { AnimatePresence } from "framer-motion";
+import { useSession, signOut } from "next-auth/react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { ParsedUrlQuery } from "querystring";
-import { Posts } from "../../type";
 import { comment } from "@prisma/client";
+import { Posts } from "../../type";
 
 interface IParams extends ParsedUrlQuery {
   slug: string;
@@ -29,7 +30,6 @@ interface Post {
 interface Props {
   result: Post;
   slug: string;
-  auth: string;
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -54,14 +54,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       result: result,
       slug: slug,
-      auth: process.env.NEXTAUTH_URL,
     },
     revalidate: 24 * 60 * 60,
   };
 };
-export default function Wordpress({ result, slug, auth }: Props) {
+export default function Wordpress({ result, slug }: Props) {
   const [data, setData] = React.useState([] as comment[]);
   const [textComment, setTextComment] = React.useState("");
+  const [modal, setModal] = React.useState(false);
   const { data: session } = useSession();
   React.useEffect(() => {
     const getData = async () => {
@@ -77,13 +77,6 @@ export default function Wordpress({ result, slug, auth }: Props) {
     };
     getData().catch((e) => console.log(e));
   }, []);
-  const [modal, setModal] = React.useState(false);
-  const close = function () {
-    setModal(false);
-  };
-  const open = function () {
-    setModal(true);
-  };
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!session?.user) {
@@ -95,19 +88,16 @@ export default function Wordpress({ result, slug, auth }: Props) {
       slug: slug,
       content: textComment,
     });
-    await (await fetch(`/api/add_comments?json=${jsonData}`)).json();
+    const response = await fetch("/api/post_comment", {
+      method: "POST",
+      body: jsonData,
+    });
+    const body = (await response.json()) as {
+      data: comment;
+      message?: string;
+    };
     setTextComment("");
-    setData([
-      {
-        post_slug: slug,
-        date: new Date(),
-        id: Math.floor(Math.random() * 1000),
-        avatar_url: session.user.image ?? "",
-        name: session.user.name ?? String(session.user.email),
-        content: textComment,
-      },
-      ...data,
-    ]);
+    setData([body.data, ...data]);
   };
   return (
     <>
@@ -123,7 +113,7 @@ export default function Wordpress({ result, slug, auth }: Props) {
         <div className="container-out">
           <div className="container-in flex-col gap-4">
             <div
-              className="wordpress border-gold border-[3px] rounded-lg shadow-xl shadow-black"
+              className="wordpress border-gold border-[3px] rounded-lg shadow-xl shadow-black w-[800px]"
               dangerouslySetInnerHTML={{ __html: result.content }}
             />
             <div className="w-[800px] flex flex-col border-gold border-[3px] rounded-lg shadow-xl shadow-black justify-center items-cente">
@@ -131,7 +121,7 @@ export default function Wordpress({ result, slug, auth }: Props) {
                 <div className="flex justify-start items-center p-4 gap-2 w-full">
                   <h2 className="font-bold">Please Log-in to Comment</h2>
                   <button
-                    onClick={(e) => (modal ? close() : open())}
+                    onClick={(e) => (modal ? setModal(false) : setModal(true))}
                     className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 ml-auto"
                   >
                     Log-In
@@ -139,59 +129,42 @@ export default function Wordpress({ result, slug, auth }: Props) {
                 </div>
               )}
               {session?.user && (
-                <div className="flex justify-start items-center p-4 gap-2 w-full">
-                  {session.user.image && (
-                    <img
-                      src={`${session.user.image}`}
-                      alt={`${session.user.name}'s avatar`}
-                      className="w-8 h-8 rounded-full border border-gold"
-                    />
-                  )}
-                  <h2 className="font-bold">
-                    {session.user.name ?? session.user.email}
-                  </h2>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault;
-                      signOut();
-                    }}
-                    className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 ml-auto"
-                  >
-                    Log-Out
-                  </button>
-                </div>
+                <>
+                  <div className="flex justify-start items-center p-4 gap-2 w-full">
+                    {session.user.image && (
+                      <img
+                        src={`${session.user.image}`}
+                        alt={`${session.user.name}'s avatar`}
+                        className="w-8 h-8 rounded-full border border-gold"
+                      />
+                    )}
+                    <h2 className="font-bold">
+                      {session.user.name ?? session.user.email}
+                    </h2>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault;
+                        signOut();
+                      }}
+                      className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 ml-auto"
+                    >
+                      Log-Out
+                    </button>
+                  </div>
+                  <Form
+                    onSubmit={onSubmit}
+                    textComment={textComment}
+                    setTextComment={(e) => setTextComment(e.target.value)}
+                  />
+                </>
               )}
               <AnimatePresence
                 initial={false}
                 exitBeforeEnter
                 onExitComplete={() => null}
               >
-                {modal && <SignModal handleClose={close} />}
+                {modal && <SignModal handleClose={() => setModal(false)} />}
               </AnimatePresence>
-              <form onSubmit={onSubmit}>
-                <div className="mb-4 w-full bg-gray-50 rounded-lg border border-gray-200">
-                  <div className="py-2 px-4 bg-white rounded-t-lg">
-                    <label className="sr-only">Your comment</label>
-                    <textarea
-                      id="comment"
-                      rows={4}
-                      className="px-1 w-full text-sm text-gray-900 bg-white border-0 focus:ring-0"
-                      placeholder="Write a comment..."
-                      required
-                      value={textComment}
-                      onChange={(e) => setTextComment(e.target.value)}
-                    ></textarea>
-                  </div>
-                  <div className="flex justify-between items-center py-2 px-3 border-t">
-                    <button
-                      type={"submit"}
-                      className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200"
-                    >
-                      Post comment
-                    </button>
-                  </div>
-                </div>
-              </form>
               <div className="mb-4 w-full bg-gray-50 rounded-lg border border-gray-200">
                 {data.length !== 0 &&
                   data.map((e) => (
@@ -211,26 +184,3 @@ export default function Wordpress({ result, slug, auth }: Props) {
     </>
   );
 }
-// export const getServerSideProps: GetServerSideProps = async function (context) {
-//   const { slug } = context.query;
-//   if (slug !== undefined && !(slug instanceof Array)) {
-//     const result = testingPost(slug);
-//     const prisma = new PrismaClient();
-//     const views = prisma.post.findUnique({
-//       where: { slug: slug },
-//       select: { views: true },
-//     });
-//     const [res, view] = await Promise.all([result, views]);
-//     if (res == null) return { notFound: true };
-//     if (view === null) {
-//       await prisma.post.create({ data: { slug: slug, views: 1 } });
-//     } else {
-//       await prisma.post.update({
-//         where: { slug: slug },
-//         data: { views: view.views + 1 },
-//       });
-//     }
-//     await prisma.$disconnect();
-//     return { props: { res } };
-//   } else return { notFound: true };
-// };

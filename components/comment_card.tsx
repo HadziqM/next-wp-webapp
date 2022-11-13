@@ -25,7 +25,7 @@ export default function CommentCard(props: Props) {
             {dayjs(new Date(props.date)).fromNow()}
           </p>
         </div>
-        <p className="border border-black rounded-md bg-white p-2">
+        <p className="border border-gray-500 rounded-md bg-white p-2">
           {props.comment}
         </p>
       </div>

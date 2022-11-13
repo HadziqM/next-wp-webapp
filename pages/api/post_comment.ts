@@ -12,10 +12,12 @@ interface Input{
 }
 
 export default async (req:NextApiRequest, res:NextApiResponse<Out>) => {
+  if (req.method !== 'POST') {
+    res.status(405).send({ message: 'Only POST requests allowed' })
+    return
+  }
+  const dataInput = JSON.parse(req.body) as Input
   const prisma = new PrismaClient()
-  const { json } = req.query
-  if(typeof(json) !== 'string') return res.status(400).json({message:"invalid data"})
-  const dataInput:Input = JSON.parse(json)
   if (typeof(dataInput.slug)!=='string') return res.send({message:"error slug"})
     const data = await prisma.comment.create({data:{date:new Date(),name:dataInput.name,avatar_url:dataInput.avatar,content:dataInput.content,post_slug:dataInput.slug}})
     res.status(200).json({data:data})
