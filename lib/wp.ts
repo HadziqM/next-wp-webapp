@@ -1,7 +1,8 @@
-interface Post{
+interface PostData{
     title?:string,
     content?:string,
 }
+import {Posts,Category} from "../type"
 
 
 
@@ -55,7 +56,7 @@ async function fetchAPI(query:string, { variables } = {} as any) {
           }
       }`
     );
-    return data?.post as Post;
+    return data?.post as PostData;
   }
   export async function posts() {
     const data = await fetchAPI(
@@ -104,13 +105,19 @@ async function fetchAPI(query:string, { variables } = {} as any) {
                   link
                 }
               }
+              categories {
+                nodes {
+                  slug
+                  name
+                }
+              }
             }
           }
         }
       }
       `
     );
-    return data?.category;
+    return data?.category as Category;
   }
 export async function listPosts(){
     const data = await fetchAPI(
@@ -138,5 +145,5 @@ export async function listPosts(){
       } 
       `
     )
-    return data?.posts
+    return data?.posts as Posts
 }

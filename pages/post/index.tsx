@@ -3,7 +3,6 @@ import { Posts, Category } from "../../type";
 import Corousel, { CorouselItem } from "../../components/corousel";
 import Layout from "../../components/layout";
 import JadwalDOM from "../../components/jadwal";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Head from "next/head";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import Cards from "../../components/card";

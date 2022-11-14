@@ -1,5 +1,6 @@
 import Router from "next/router";
 import Image from "next/image";
+import { dateConversion } from "../lib/date_id";
 
 interface Sorted {
   img: string;
@@ -26,9 +27,7 @@ export default function Cards({ img, title, date, tags, slug }: Sorted) {
         <h2 className="text-black text-2xl font-normal">{title}</h2>
         <div className="flex gap-1 flex-start">
           <p className="text-gold uppercase mr-4">{tags}</p>
-          <p className="uppercase font-light">
-            {String(new Date(date)).replace("GMT+0700 (Indochina Time)", "")}
-          </p>
+          <p className="font-light">{dateConversion(new Date(date))}</p>
         </div>
       </div>
     </div>

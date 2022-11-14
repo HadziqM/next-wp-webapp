@@ -5,6 +5,12 @@ export interface Category{
             slug:string
             title:string
             date:string
+            categories:{
+                nodes:{
+                    name:string
+                    slug:string
+                }[]
+            }
             featuredImage:{
                 node:{
                     link:string
@@ -12,12 +18,6 @@ export interface Category{
             }
         }[]
     }
-}
-export interface Views{
-    views:{
-        slug:string
-        view:number
-    }[]
 }
 export interface Posts{
     edges:{
@@ -37,5 +37,11 @@ export interface Posts{
                 }
             }
         }
+    }[]
+}
+export interface Views{
+    views:{
+        slug:string
+        view:number
     }[]
 }
