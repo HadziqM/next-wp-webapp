@@ -34,29 +34,29 @@ export default function Footer() {
         </Link>
         <Link
           className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
-          href="/"
+          href="/post/category"
         >
-          kajian kitab
+          post
         </Link>
       </div>
       <div className="container-col">
         <Link
           className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
-          href="/"
+          href="/infaq"
         >
-          agenda
+          infaq
         </Link>
         <Link
           className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
-          href="/"
+          href="/author"
         >
-          podcast
+          Author
         </Link>
         <Link
           className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
-          href="/"
+          href="/kontak"
         >
-          kontak
+          Kontak
         </Link>
       </div>
       <div className="container-col items-start gap-2">

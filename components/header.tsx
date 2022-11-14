@@ -37,25 +37,25 @@ export default function Header() {
             </Link>
             <Link
               className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
-              href="/"
+              href="/post/category"
             >
-              kajian kitab
+              Post
             </Link>
             <Link
               className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
-              href="/"
+              href="/infaq"
             >
-              agenda
+              Infaq
             </Link>
             <Link
               className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
-              href="/"
+              href="/author"
             >
-              podcast
+              Author
             </Link>
             <Link
               className="uppercase ml-2 hover:bg-opacity-20 hover:bg-gold p-1 rounded-lg"
-              href="/"
+              href="/kontak"
             >
               kontak
             </Link>
