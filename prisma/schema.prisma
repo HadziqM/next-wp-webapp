@@ -11,10 +11,12 @@ datasource db {
 }
 
 model post {
-  id      Int       @id @default(autoincrement())
-  slug    String    @unique
-  views   Int
-  comment comment[]
+  id        Int         @id @default(autoincrement())
+  slug      String      @unique
+  views     Int
+  comment   comment[]
+  infaq     infaq[]
+  infaq_trf infaq_trf[]
 }
 
 model comment {
@@ -29,8 +31,18 @@ model comment {
 
 model infaq {
   id    Int    @id @default(autoincrement())
-  name  String @unique
-  image String
-  max   Int
-  value Int
+  post  post   @relation(fields: [slug], references: [slug])
+  slug  String
+  max   Int    @default(0)
+  value Int    @default(0)
+}
+
+model infaq_trf {
+  id     Int      @id @default(autoincrement())
+  infaq  post     @relation(fields: [slug], references: [slug])
+  slug   String
+  nama   String
+  bank   String
+  date   DateTime @default(now())
+  jumlah Int
 }

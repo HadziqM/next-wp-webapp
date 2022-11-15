@@ -25,14 +25,6 @@ export const authOptions:NextAuthOptions = {
         clientSecret: process.env.DISCORD_CLIENT_SECRET
       })
   ],
-  callbacks: {
-    async jwt({ token, account }) {
-      if (account) {
-        token.accessToken = account.access_token
-      }
-      return token
-    }
-  },
 }
 export default NextAuth(authOptions) 
 
