@@ -6,8 +6,8 @@ import { config } from "dotenv";
 import { readdirSync } from "fs";
 import { join } from "path";
 
-config()
 
+config({path: '../.env'})
 
 client.slashCommands = new Collection<string, SlashCommand>()
 client.commands = new Collection<string, Command>()

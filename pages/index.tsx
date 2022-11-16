@@ -165,14 +165,12 @@ export default function Test() {
           <Donate
             title="Maintenance Pompa Air"
             image={Background2}
-            description="Program pemeliharaan fasilitas Masjid Akbar Moed’Har Arifin agar selalu prima dalam melayani kebutuhan pada jamaah dan masyarakat yang sedang berkunjung."
             max={15000000}
             min={1000000}
           />
           <Donate
             title="Jum’at berkah"
             image={donate1}
-            description="Program rutin berupa sajian menu makan siang untuk para jamaah sholat jum’at dan masyarakat umum yang sedang beristirahat di kawasan Masjid Akbar Moed’Har Arifin."
             max={15000000}
             min={10000000}
           />

@@ -1,11 +1,12 @@
 import Image, { StaticImageData } from "next/image";
+import Router from "next/router";
 
 interface Idk {
   max: number;
   min: number;
-  image: StaticImageData;
+  image: string | StaticImageData;
   title: string;
-  description: string;
+  slug: string;
 }
 
 export default function Donate(anjir: Idk) {
@@ -25,9 +26,6 @@ export default function Donate(anjir: Idk) {
         />
       </div>
       <h2 className="font-bold text-[1.2rem] text-white">{anjir.title}</h2>
-      <p className="text-center text-[1rem] font-light text-white">
-        {anjir.description}
-      </p>
       <p className="font-[0.5rem] text-gold mr-auto ml-[8px]">TERKUMPUL</p>
       <div className="flex h-[2px] w-[487px] justify-start items-center bg-white">
         <div
@@ -39,7 +37,10 @@ export default function Donate(anjir: Idk) {
         <p className="font-[0.5rem] text-gold">{formatter.format(anjir.min)}</p>
         <p className="font-[0.5rem] text-gold">{formatter.format(anjir.max)}</p>
       </div>
-      <button className="bg-gold text-center rounded-[43px] w-[244px] h-[43px] font-bold">
+      <button
+        className="bg-gold text-center rounded-[43px] w-[244px] h-[43px] font-bold"
+        onClick={(e) => Router.push(`/infaq/${anjir.slug}`)}
+      >
         DONASI SEKARANG
       </button>
     </div>

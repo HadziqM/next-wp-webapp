@@ -2,6 +2,7 @@ import Layout from "../../components/layout";
 import { categorys } from "../../lib/wp";
 import Head from "next/head";
 import { PrismaClient } from "@prisma/client";
+import Donate from "../../components/donate";
 import { InferGetStaticPropsType } from "next";
 
 export async function getStaticProps() {
@@ -33,7 +34,22 @@ export default function Infaq({
         <link rel="icon" href="/logo.svg" />
       </Head>
       <Layout>
-        <h1>Work In Progress</h1>
+        <div className="container-out">
+          <div className="container-in">
+            {infaq.map((e) => {
+              const filtered = data.filter((i) => i.slug === e.slug)[0];
+              return (
+                <Donate
+                  max={filtered.max}
+                  min={filtered.value}
+                  image={e.featuredImage.node.link}
+                  title={e.title}
+                  slug={e.slug}
+                />
+              );
+            })}
+          </div>
+        </div>
       </Layout>
     </>
   );

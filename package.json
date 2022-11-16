@@ -9,7 +9,7 @@
     "lint": "next lint",
     "dstart": "cd discord && node build/index.js",
     "drestart": "cd discord && tsc --build && node ./build/index.js",
-    "setup": "prisma generate && cd discord && tsc --build"
+    "setup": "prisma generate && next build && cd discord && tsc --build"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^13.0.1",

@@ -32,7 +32,7 @@ model comment {
 model infaq {
   id    Int    @id @default(autoincrement())
   post  post   @relation(fields: [slug], references: [slug])
-  slug  String
+  slug  String @unique
   max   Int    @default(0)
   value Int    @default(0)
 }
