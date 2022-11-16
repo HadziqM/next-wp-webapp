@@ -2,26 +2,29 @@ import Layout from "../../components/layout";
 import { categorys } from "../../lib/wp";
 import Head from "next/head";
 import { PrismaClient } from "@prisma/client";
-import Slug from "../api/comments/[slug]";
+import { InferGetStaticPropsType } from "next";
 
-// export async function getStaticProps() {
-//   const prisma = new PrismaClient();
-//   const infaq = await categorys("infaq");
-//   const data = await Promise.all(
-//     infaq.posts.nodes.map(async (e) => {
-//       return await prisma.post.findUnique({
-//         where: { slug: e.slug },
-//         include: { infaq: true, infaq_trf: true },
-//       });
-//     })
-//   );
-//   return {
-//     props: {},
-//     revalidate: 24 * 60 * 60,
-//   };
-// }
+export async function getStaticProps() {
+  const prisma = new PrismaClient();
+  const [infaq, data] = await Promise.all([
+    categorys("infaq"),
+    prisma.infaq.findMany(),
+  ]);
+  return {
+    props: {
+      infaq: infaq.posts.nodes.filter((e) =>
+        data.map((i) => i.slug).includes(e.slug)
+      ),
+      data: data,
+    },
+    revalidate: 24 * 60 * 60,
+  };
+}
 
-export default function Infaq() {
+export default function Infaq({
+  data,
+  infaq,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <Head>

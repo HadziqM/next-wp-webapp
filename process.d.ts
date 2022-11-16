@@ -22,5 +22,8 @@ namespace NodeJS {
       SECRET: string
       NEXTAUTH_SECRET:string
       DATABASE_URL:string
+      TOKEN: string
+      CLIENT_ID: string
+      PREFIX: string
     }
   }
