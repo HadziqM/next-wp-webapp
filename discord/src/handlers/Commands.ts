@@ -4,6 +4,7 @@ import { readdirSync } from "fs";
 import { join } from "path";
 import { Command, SlashCommand, ContextMenu } from "../types";
 
+
 module.exports = (client : Client) => {
     const slashCommands : SlashCommandBuilder[] = []
     const commands : Command[] = []

@@ -5,9 +5,10 @@ import { Command, SlashCommand } from "./types";
 import { config } from "dotenv";
 import { readdirSync } from "fs";
 import { join } from "path";
-import console from "console";
 
 config()
+
+
 client.slashCommands = new Collection<string, SlashCommand>()
 client.commands = new Collection<string, Command>()
 client.cooldowns = new Collection<string, number>()
@@ -18,8 +19,6 @@ readdirSync(handlersDir).forEach(handler => {
 
 // Caught Unhandled Errors
 process.on('unhandledRejection', async (error:any) => {
-    const ch = client.channels.cache.get(String(process.env.EROR_LOG_CHANNEL))
-    if (ch?.isTextBased()){ch.send(String(error.stack))}
     console.log(error)
 });
 
